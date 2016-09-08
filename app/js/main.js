@@ -1,4 +1,71 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+	value: true
+});
+var config = function config($stateProvider, $urlRouterProvider) {
+
+	$urlRouterProvider.otherwise('/');
+
+	$stateProvider
+	//APP CORE-----------------------
+	.state('root', {
+		abstract: true,
+		controller: 'LayoutCtrl',
+		templateUrl: 'templates/app-core/layout.html'
+	}).state('root.dash', {
+		url: '/',
+		controller: 'DashCtrl',
+		templateUrl: 'templates/app-core/dash.html'
+	}).state('root.login', {
+		url: '/login',
+		controller: 'LoginCtrl',
+		templateUrl: 'templates/app-core/login.html'
+	}).state('root.register', {
+		url: '/register',
+		controller: 'LoginCtrl',
+		templateUrl: 'templates/app-core/register.html'
+	});
+};
+config.$inject = ['$stateProvider', '$urlRouterProvider'];
+exports['default'] = config;
+module.exports = exports['default'];
+
+},{}],2:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var DashCtrl = function DashCtrl() {};
+DashCtrl.$inject = [];
+exports["default"] = DashCtrl;
+module.exports = exports["default"];
+
+},{}],3:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var LayoutCtrl = function LayoutCtrl() {};
+LayoutCtrl.$inject = [];
+exports["default"] = LayoutCtrl;
+module.exports = exports["default"];
+
+},{}],4:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var LoginCtrl = function LoginCtrl() {};
+LoginCtrl.$inject = [];
+exports["default"] = LoginCtrl;
+module.exports = exports["default"];
+
+},{}],5:[function(require,module,exports){
 //Libraries
 'use strict';
 
@@ -10,9 +77,25 @@ var _angular2 = _interopRequireDefault(_angular);
 
 require('angular-ui-router');
 
-_angular2['default'].module('app.core', ['ui.router']);
+var _ctrlLayoutCtrl = require('./ctrl/layout.ctrl');
 
-},{"angular":5,"angular-ui-router":3}],2:[function(require,module,exports){
+var _ctrlLayoutCtrl2 = _interopRequireDefault(_ctrlLayoutCtrl);
+
+var _ctrlDashCtrl = require('./ctrl/dash.ctrl');
+
+var _ctrlDashCtrl2 = _interopRequireDefault(_ctrlDashCtrl);
+
+var _ctrlLoginCtrl = require('./ctrl/login.ctrl');
+
+var _ctrlLoginCtrl2 = _interopRequireDefault(_ctrlLoginCtrl);
+
+var _config = require('./config');
+
+var _config2 = _interopRequireDefault(_config);
+
+_angular2['default'].module('app.core', ['ui.router']).config(_config2['default']).controller('LayoutCtrl', _ctrlLayoutCtrl2['default']).controller('DashCtrl', _ctrlDashCtrl2['default']).controller('LoginCtrl', _ctrlLoginCtrl2['default']);
+
+},{"./config":1,"./ctrl/dash.ctrl":2,"./ctrl/layout.ctrl":3,"./ctrl/login.ctrl":4,"angular":9,"angular-ui-router":7}],6:[function(require,module,exports){
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -49,7 +132,7 @@ _firebase2['default'].initializeApp(fireConfig);
 
 _angular2['default'].module('app', ['app.core', 'ui.router', 'firebase']);
 
-},{"./app-core/index":1,"angular":5,"angular-ui-router":3,"angularfire":7,"firebase":8,"jquery":10}],3:[function(require,module,exports){
+},{"./app-core/index":5,"angular":9,"angular-ui-router":7,"angularfire":11,"firebase":12,"jquery":14}],7:[function(require,module,exports){
 /**
  * State-based routing for AngularJS
  * @version v0.3.1
@@ -4626,7 +4709,7 @@ angular.module('ui.router.state')
   .filter('isState', $IsStateFilter)
   .filter('includedByState', $IncludedByStateFilter);
 })(window, window.angular);
-},{}],4:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 /**
  * @license AngularJS v1.5.8
  * (c) 2010-2016 Google, Inc. http://angularjs.org
@@ -36395,11 +36478,11 @@ $provide.value("$locale", {
 })(window);
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],5:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":4}],6:[function(require,module,exports){
+},{"./angular":8}],10:[function(require,module,exports){
 /*!
  * AngularFire is the officially supported AngularJS binding for Firebase. Firebase
  * is a full backend so you don't need servers to build your Angular app. AngularFire
@@ -38667,7 +38750,7 @@ if ( typeof Object.getPrototypeOf !== "function" ) {
     }
 })();
 
-},{}],7:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 // Make sure dependencies are loaded on the window
 require('angular');
 require('firebase');
@@ -38678,7 +38761,7 @@ require('./dist/angularfire');
 // Export the module name from the Angular module
 module.exports = 'firebase';
 
-},{"./dist/angularfire":6,"angular":5,"firebase":8}],8:[function(require,module,exports){
+},{"./dist/angularfire":10,"angular":9,"firebase":12}],12:[function(require,module,exports){
 /**
  *  Firebase libraries for browser - npm package.
  *
@@ -38689,7 +38772,7 @@ module.exports = 'firebase';
 require('./firebase');
 module.exports = firebase;
 
-},{"./firebase":9}],9:[function(require,module,exports){
+},{"./firebase":13}],13:[function(require,module,exports){
 (function (global){
 /*! @license Firebase v3.3.1
     Build: 3.3.1-rc.3
@@ -39274,7 +39357,7 @@ ua.STATE_CHANGED="state_changed";va.RUNNING="running";va.PAUSED="paused";va.SUCC
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],10:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.2.4
  * http://jquery.com/
@@ -49090,7 +49173,7 @@ if ( !noGlobal ) {
 return jQuery;
 }));
 
-},{}]},{},[2])
+},{}]},{},[6])
 
 
 //# sourceMappingURL=main.js.map
