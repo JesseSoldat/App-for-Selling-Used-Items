@@ -10,19 +10,15 @@ var config = function config($stateProvider, $urlRouterProvider) {
 
 	$stateProvider
 	//APP CORE-----------------------
-	.state('root', {
-		abstract: true,
-		controller: 'LayoutCtrl',
-		templateUrl: 'templates/app-core/layout.html'
-	}).state('root.dash', {
+	.state('dash', {
 		url: '/',
 		controller: 'DashCtrl',
 		templateUrl: 'templates/app-core/dash.html'
-	}).state('root.login', {
+	}).state('login', {
 		url: '/login',
 		controller: 'LoginCtrl',
 		templateUrl: 'templates/app-core/login.html'
-	}).state('root.register', {
+	}).state('register', {
 		url: '/register',
 		controller: 'LoginCtrl',
 		templateUrl: 'templates/app-core/register.html'
@@ -33,15 +29,21 @@ exports['default'] = config;
 module.exports = exports['default'];
 
 },{}],2:[function(require,module,exports){
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
+Object.defineProperty(exports, '__esModule', {
+	value: true
 });
-var DashCtrl = function DashCtrl() {};
-DashCtrl.$inject = [];
-exports["default"] = DashCtrl;
-module.exports = exports["default"];
+var DashCtrl = function DashCtrl($scope) {
+	$scope.dashControls = true;
+
+	$scope.changeDash = function () {
+		console.log('changed dash');
+	};
+};
+DashCtrl.$inject = ['$scope'];
+exports['default'] = DashCtrl;
+module.exports = exports['default'];
 
 },{}],3:[function(require,module,exports){
 'use strict';
@@ -49,27 +51,16 @@ module.exports = exports["default"];
 Object.defineProperty(exports, '__esModule', {
 	value: true
 });
-var LayoutCtrl = function LayoutCtrl($scope) {
+var LoginCtrl = function LoginCtrl($scope, LoginService) {
 
-	$scope.dashButton = true;
-	// $scope.profileButton = false;
+	$scope.register = function (user) {};
+	$scope.login = function (user) {};
 };
-LayoutCtrl.$inject = ['$scope'];
-exports['default'] = LayoutCtrl;
+LoginCtrl.$inject = ['$scope', 'LoginService'];
+exports['default'] = LoginCtrl;
 module.exports = exports['default'];
 
 },{}],4:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var LoginCtrl = function LoginCtrl() {};
-LoginCtrl.$inject = [];
-exports["default"] = LoginCtrl;
-module.exports = exports["default"];
-
-},{}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -78,15 +69,16 @@ Object.defineProperty(exports, '__esModule', {
 var navBar = function navBar() {
 	return {
 		restrict: 'E',
+		transclude: true,
 		scope: true,
-		template: '\n\t\t<div>\n\t\t\t<nav>\n\t\t\t\t<div>\n\t\t\t\t\t<ul>\n\t\t\t\t\t\t<li><a href="#/dash">Dash</a></li>\n\t\t\t\t\t\t<li><a href="#/login">Login</a></li>\n\t\t\t\t\t\t<li><a href="#/register">Register</a></li>\n\t\t\t\t\t</ul>\n\t\t\t\t</div>\n\n\t\t\t\t<div ng-show="{{dashButton}}">\n\t\t\t\t\t<button>Edit</button>\n\t\t\t\t\t<button>Delete</button>\n\t\t\t\t</div>\n\t\t\t\t<div ng-show="{{profileButton}}">\n\t\t\t\t\t<button>Edit</button>\n\t\t\t\t\t<button>Delete</button>\n\t\t\t\t</div>\n\t\t\t\t<hr>\n\t\t\t</nav>\n\t\t</div>\n\n\t\t'
+		templateUrl: './templates/app-core/layoutTemp.html'
 	};
 };
 navBar.$inject = [];
 exports['default'] = navBar;
 module.exports = exports['default'];
 
-},{}],6:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 //Libraries
 'use strict';
 
@@ -97,10 +89,6 @@ var _angular = require('angular');
 var _angular2 = _interopRequireDefault(_angular);
 
 require('angular-ui-router');
-
-var _ctrlLayoutCtrl = require('./ctrl/layout.ctrl');
-
-var _ctrlLayoutCtrl2 = _interopRequireDefault(_ctrlLayoutCtrl);
 
 var _ctrlDashCtrl = require('./ctrl/dash.ctrl');
 
@@ -114,13 +102,28 @@ var _directivesNavBarDirective = require('./directives/nav-bar.directive');
 
 var _directivesNavBarDirective2 = _interopRequireDefault(_directivesNavBarDirective);
 
+var _servicesLoginService = require('./services/login.service');
+
+var _servicesLoginService2 = _interopRequireDefault(_servicesLoginService);
+
 var _config = require('./config');
 
 var _config2 = _interopRequireDefault(_config);
 
-_angular2['default'].module('app.core', ['ui.router']).config(_config2['default']).controller('LayoutCtrl', _ctrlLayoutCtrl2['default']).controller('DashCtrl', _ctrlDashCtrl2['default']).controller('LoginCtrl', _ctrlLoginCtrl2['default']).directive('navBar', _directivesNavBarDirective2['default']);
+_angular2['default'].module('app.core', ['ui.router']).config(_config2['default']).controller('DashCtrl', _ctrlDashCtrl2['default']).controller('LoginCtrl', _ctrlLoginCtrl2['default']).directive('navBar', _directivesNavBarDirective2['default']).service('LoginService', _servicesLoginService2['default']);
 
-},{"./config":1,"./ctrl/dash.ctrl":2,"./ctrl/layout.ctrl":3,"./ctrl/login.ctrl":4,"./directives/nav-bar.directive":5,"angular":10,"angular-ui-router":8}],7:[function(require,module,exports){
+},{"./config":1,"./ctrl/dash.ctrl":2,"./ctrl/login.ctrl":3,"./directives/nav-bar.directive":4,"./services/login.service":6,"angular":10,"angular-ui-router":8}],6:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var LoginService = function LoginService() {};
+LoginService.$inject = [];
+exports["default"] = LoginService;
+module.exports = exports["default"];
+
+},{}],7:[function(require,module,exports){
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -157,7 +160,7 @@ _firebase2['default'].initializeApp(fireConfig);
 
 _angular2['default'].module('app', ['app.core', 'ui.router', 'firebase']);
 
-},{"./app-core/index":6,"angular":10,"angular-ui-router":8,"angularfire":12,"firebase":13,"jquery":15}],8:[function(require,module,exports){
+},{"./app-core/index":5,"angular":10,"angular-ui-router":8,"angularfire":12,"firebase":13,"jquery":15}],8:[function(require,module,exports){
 /**
  * State-based routing for AngularJS
  * @version v0.3.1

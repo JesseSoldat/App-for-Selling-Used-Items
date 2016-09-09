@@ -1,0 +1,52 @@
+<div class="top-bar">
+  <nav>
+    <ul class="title-area">
+      <div class="left">
+        <li class="name">
+          <h1><a href="#/">J'List</a></h1>
+        </li>  
+        <li class="name">
+          <h1><a href="#/dash">Dash</a></h1>
+        </li>
+        <li class="name">
+          <h1><a href="#/login">Login</a></h1>
+        </li>
+        <li class="name">
+          <h1><a href="#/register">Register</a></h1>
+        </li>
+      </div>
+      <div class="right">
+          <div ng-transclude></div>
+      </div>    
+    </ul>   
+  </nav>
+</div>
+
+<!-- 
+template: `
+    <div>
+      <nav>
+        <div id="navBarLeft">
+          <ul>
+              <li><a href="#/dash">Dash</a></li>
+              <li><a href="#/login">Login</a></li>
+              <li><a href="#/register">Register</a></li>
+          </ul>
+        </div>
+
+        <div id="navBarRight" ng-transclude></div>
+
+        <div ng-show="{{dashControls}}">
+          <button>Edit</button>
+          <button>Delete</button>
+        </div>
+        <div ng-show="{{profileControls}}">
+          <button>Edit</button>
+          <button>Delete</button>
+        </div>
+
+        <hr>
+      </nav>
+    </div>
+
+    ` -->
