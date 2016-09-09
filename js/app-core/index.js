@@ -6,6 +6,9 @@ import LayoutCtrl from './ctrl/layout.ctrl';
 import DashCtrl from './ctrl/dash.ctrl';
 import LoginCtrl from './ctrl/login.ctrl';
 
+
+import navBar from './directives/nav-bar.directive';
+
 import config from './config';
 
 angular
@@ -14,5 +17,6 @@ angular
 	.controller('LayoutCtrl', LayoutCtrl)
 	.controller('DashCtrl', DashCtrl)
 	.controller('LoginCtrl', LoginCtrl)
+	.directive('navBar', navBar)
 
 ;

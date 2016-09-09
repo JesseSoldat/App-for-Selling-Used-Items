@@ -44,15 +44,19 @@ exports["default"] = DashCtrl;
 module.exports = exports["default"];
 
 },{}],3:[function(require,module,exports){
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
+Object.defineProperty(exports, '__esModule', {
+	value: true
 });
-var LayoutCtrl = function LayoutCtrl() {};
-LayoutCtrl.$inject = [];
-exports["default"] = LayoutCtrl;
-module.exports = exports["default"];
+var LayoutCtrl = function LayoutCtrl($scope) {
+
+	$scope.dashButton = true;
+	// $scope.profileButton = false;
+};
+LayoutCtrl.$inject = ['$scope'];
+exports['default'] = LayoutCtrl;
+module.exports = exports['default'];
 
 },{}],4:[function(require,module,exports){
 "use strict";
@@ -66,6 +70,23 @@ exports["default"] = LoginCtrl;
 module.exports = exports["default"];
 
 },{}],5:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+	value: true
+});
+var navBar = function navBar() {
+	return {
+		restrict: 'E',
+		scope: true,
+		template: '\n\t\t<div>\n\t\t\t<nav>\n\t\t\t\t<div>\n\t\t\t\t\t<ul>\n\t\t\t\t\t\t<li><a href="#/dash">Dash</a></li>\n\t\t\t\t\t\t<li><a href="#/login">Login</a></li>\n\t\t\t\t\t\t<li><a href="#/register">Register</a></li>\n\t\t\t\t\t</ul>\n\t\t\t\t</div>\n\n\t\t\t\t<div ng-show="{{dashButton}}">\n\t\t\t\t\t<button>Edit</button>\n\t\t\t\t\t<button>Delete</button>\n\t\t\t\t</div>\n\t\t\t\t<div ng-show="{{profileButton}}">\n\t\t\t\t\t<button>Edit</button>\n\t\t\t\t\t<button>Delete</button>\n\t\t\t\t</div>\n\t\t\t\t<hr>\n\t\t\t</nav>\n\t\t</div>\n\n\t\t'
+	};
+};
+navBar.$inject = [];
+exports['default'] = navBar;
+module.exports = exports['default'];
+
+},{}],6:[function(require,module,exports){
 //Libraries
 'use strict';
 
@@ -89,13 +110,17 @@ var _ctrlLoginCtrl = require('./ctrl/login.ctrl');
 
 var _ctrlLoginCtrl2 = _interopRequireDefault(_ctrlLoginCtrl);
 
+var _directivesNavBarDirective = require('./directives/nav-bar.directive');
+
+var _directivesNavBarDirective2 = _interopRequireDefault(_directivesNavBarDirective);
+
 var _config = require('./config');
 
 var _config2 = _interopRequireDefault(_config);
 
-_angular2['default'].module('app.core', ['ui.router']).config(_config2['default']).controller('LayoutCtrl', _ctrlLayoutCtrl2['default']).controller('DashCtrl', _ctrlDashCtrl2['default']).controller('LoginCtrl', _ctrlLoginCtrl2['default']);
+_angular2['default'].module('app.core', ['ui.router']).config(_config2['default']).controller('LayoutCtrl', _ctrlLayoutCtrl2['default']).controller('DashCtrl', _ctrlDashCtrl2['default']).controller('LoginCtrl', _ctrlLoginCtrl2['default']).directive('navBar', _directivesNavBarDirective2['default']);
 
-},{"./config":1,"./ctrl/dash.ctrl":2,"./ctrl/layout.ctrl":3,"./ctrl/login.ctrl":4,"angular":9,"angular-ui-router":7}],6:[function(require,module,exports){
+},{"./config":1,"./ctrl/dash.ctrl":2,"./ctrl/layout.ctrl":3,"./ctrl/login.ctrl":4,"./directives/nav-bar.directive":5,"angular":10,"angular-ui-router":8}],7:[function(require,module,exports){
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -132,7 +157,7 @@ _firebase2['default'].initializeApp(fireConfig);
 
 _angular2['default'].module('app', ['app.core', 'ui.router', 'firebase']);
 
-},{"./app-core/index":5,"angular":9,"angular-ui-router":7,"angularfire":11,"firebase":12,"jquery":14}],7:[function(require,module,exports){
+},{"./app-core/index":6,"angular":10,"angular-ui-router":8,"angularfire":12,"firebase":13,"jquery":15}],8:[function(require,module,exports){
 /**
  * State-based routing for AngularJS
  * @version v0.3.1
@@ -4709,7 +4734,7 @@ angular.module('ui.router.state')
   .filter('isState', $IsStateFilter)
   .filter('includedByState', $IncludedByStateFilter);
 })(window, window.angular);
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 /**
  * @license AngularJS v1.5.8
  * (c) 2010-2016 Google, Inc. http://angularjs.org
@@ -36478,11 +36503,11 @@ $provide.value("$locale", {
 })(window);
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":8}],10:[function(require,module,exports){
+},{"./angular":9}],11:[function(require,module,exports){
 /*!
  * AngularFire is the officially supported AngularJS binding for Firebase. Firebase
  * is a full backend so you don't need servers to build your Angular app. AngularFire
@@ -38750,7 +38775,7 @@ if ( typeof Object.getPrototypeOf !== "function" ) {
     }
 })();
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 // Make sure dependencies are loaded on the window
 require('angular');
 require('firebase');
@@ -38761,7 +38786,7 @@ require('./dist/angularfire');
 // Export the module name from the Angular module
 module.exports = 'firebase';
 
-},{"./dist/angularfire":10,"angular":9,"firebase":12}],12:[function(require,module,exports){
+},{"./dist/angularfire":11,"angular":10,"firebase":13}],13:[function(require,module,exports){
 /**
  *  Firebase libraries for browser - npm package.
  *
@@ -38772,7 +38797,7 @@ module.exports = 'firebase';
 require('./firebase');
 module.exports = firebase;
 
-},{"./firebase":13}],13:[function(require,module,exports){
+},{"./firebase":14}],14:[function(require,module,exports){
 (function (global){
 /*! @license Firebase v3.3.1
     Build: 3.3.1-rc.3
@@ -39357,7 +39382,7 @@ ua.STATE_CHANGED="state_changed";va.RUNNING="running";va.PAUSED="paused";va.SUCC
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.2.4
  * http://jquery.com/
@@ -49173,7 +49198,7 @@ if ( !noGlobal ) {
 return jQuery;
 }));
 
-},{}]},{},[6])
+},{}]},{},[7])
 
 
 //# sourceMappingURL=main.js.map
