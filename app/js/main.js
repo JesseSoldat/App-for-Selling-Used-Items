@@ -44,7 +44,6 @@ var DashCtrl = function DashCtrl($scope, $state, $stateParams, DashService) {
 	firebase.auth().onAuthStateChanged(function (user) {
 		if (user) {
 			uid = user.uid;
-			console.log(uid);
 		} else {
 			$state.go('login');
 		}
@@ -102,7 +101,24 @@ var fileUpload = function fileUpload(DashService) {
 		scope: {
 			type: '@'
 		},
-		templateUrl: './templates/app-core/file-upload.html'
+		templateUrl: './templates/app-core/file-upload.html',
+		link: function link(scope, element, attrs, ctrl) {
+			var uploader = undefined;
+			var submitBtn = undefined;
+			element.on('click', function () {
+				submitBtn = document.getElementById('#addPhotosBtn');
+				uploader = document.getElementById('dashUploader');
+			});
+			element.on('submit', function () {
+				var file = element.find('input')[0].files[0];
+				if (file) {
+					submitBtn.disabled = true;
+					DashService.fileUpload(file, uploader, scope.type);
+				} else {
+					return;
+				}
+			});
+		}
 	};
 };
 fileUpload.$inject = ['DashService'];
@@ -177,15 +193,69 @@ var _config2 = _interopRequireDefault(_config);
 _angular2['default'].module('app.core', ['ui.router']).config(_config2['default']).controller('DashCtrl', _ctrlDashCtrl2['default']).controller('LoginCtrl', _ctrlLoginCtrl2['default']).directive('navBar', _directivesNavBarDirective2['default']).directive('fileUpload', _directivesFileUploadDirective2['default']).service('LoginService', _servicesLoginService2['default']).service('DashService', _servicesDashService2['default']);
 
 },{"./config":1,"./ctrl/dash.ctrl":2,"./ctrl/login.ctrl":3,"./directives/file-upload.directive":4,"./directives/nav-bar.directive":5,"./services/dash.service":7,"./services/login.service":8,"angular":12,"angular-ui-router":10}],7:[function(require,module,exports){
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
+Object.defineProperty(exports, '__esModule', {
+	value: true
 });
-var DashService = function DashService() {};
-DashService.$inject = [];
-exports["default"] = DashService;
-module.exports = exports["default"];
+var DashService = function DashService($state, $firebaseArray, $firebaseObject) {
+	this.fileUpload = fileUpload;
+
+	var rootRef = firebase.database();
+
+	function fileUpload(file, uploader, fileType) {
+		//get the user object
+		var user = firebase.auth().currentUser;
+		//fileType used for Avatar and Photo
+		var storageRef = firebase.storage().ref();
+
+		var fileName = file.name;
+		//get the file extension
+		var ext = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
+		//End point to store the image
+		var dashImgRef = storageRef.child('jlist/' + user.uid + '/dash/dashImg/dashImg.' + ext);
+		//upload the file and set it as a variable to track
+		var uploadTask = dashImgRef.put(file);
+		//as the file uploads track the progress
+
+		uploadTask.on('state_changed', function (snapshot) {
+			var percent = snapshot.bytesTransferred / snapshot.totalBytes * 100;
+			uploader.value = percent;
+		}, function error(err) {}, function complete() {
+			var url = dashImgRef.getDownloadURL().then(function (url) {
+				var ref = rootRef.ref('jlist/users/' + user.uid + '/dashImg');
+				var obj = $firebaseObject(ref);
+				obj.url = url;
+				obj.$save().then(function (ref) {
+					var refId = ref.key;
+					console.log(refId);
+					$state.go('dash');
+				}, function (err) {
+					console.log(err);
+				}); //obj.$save
+			}) //getDownloadURL().then
+			['catch'](function (err) {
+				switch (error.code) {
+					case 'storage/object_not_found':
+						// File doesn't exist
+						break;
+					case 'storage/unauthorized':
+						// User doesn't have permission to access the object
+						break;
+					case 'storage/canceled':
+						// User canceled the upload
+						break;
+					case 'storage/unknown':
+						// Unknown error occurred, inspect the server response
+						break;
+				}
+			}); //catch
+		}); //uploadTask.on
+	} //fileUpload
+};
+DashService.$inject = ['$state', '$firebaseArray', '$firebaseObject'];
+exports['default'] = DashService;
+module.exports = exports['default'];
 
 },{}],8:[function(require,module,exports){
 "use strict";

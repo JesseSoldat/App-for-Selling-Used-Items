@@ -5,7 +5,6 @@ let DashCtrl = function($scope, $state, $stateParams, DashService){
 	firebase.auth().onAuthStateChanged(function(user){
 		if (user) {
 			uid = user.uid;
-			console.log(uid);
 		} else {
 			$state.go('login');
 		}
