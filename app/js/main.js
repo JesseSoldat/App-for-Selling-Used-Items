@@ -14,6 +14,9 @@ var config = function config($stateProvider, $urlRouterProvider) {
 		url: '/',
 		controller: 'DashCtrl',
 		templateUrl: 'templates/app-core/dash.html'
+	}).state('editDash', {
+		url: '/editdash',
+		templateUrl: 'templates/app-core/edit-dash.html'
 	}).state('login', {
 		url: '/login',
 		controller: 'LoginCtrl',
@@ -34,14 +37,31 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
 	value: true
 });
-var DashCtrl = function DashCtrl($scope) {
+var DashCtrl = function DashCtrl($scope, $state, $stateParams, DashService) {
 	$scope.dashControls = true;
 
+	var uid = undefined;
+	firebase.auth().onAuthStateChanged(function (user) {
+		if (user) {
+			uid = user.uid;
+			console.log(uid);
+		} else {
+			$state.go('login');
+		}
+	});
+
 	$scope.changeDash = function () {
-		console.log('changed dash');
+		$state.go('editDash');
+	};
+	$scope.logOut = function () {
+		firebase.auth().signOut().then(function () {
+			$state.go('login');
+		}, function (error) {
+			console.log(error);
+		});
 	};
 };
-DashCtrl.$inject = ['$scope'];
+DashCtrl.$inject = ['$scope', '$state', '$stateParams', 'DashService'];
 exports['default'] = DashCtrl;
 module.exports = exports['default'];
 
@@ -51,16 +71,46 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
 	value: true
 });
-var LoginCtrl = function LoginCtrl($scope, LoginService) {
+var LoginCtrl = function LoginCtrl($scope, $state, LoginService) {
 
-	$scope.register = function (user) {};
-	$scope.login = function (user) {};
+	firebase.auth().onAuthStateChanged(function (user) {
+		if (user) {
+			$state.go('dash');
+		}
+	});
+
+	$scope.register = function (user) {
+		LoginService.register(user);
+	};
+	$scope.login = function (user) {
+		LoginService.login(user);
+	};
 };
-LoginCtrl.$inject = ['$scope', 'LoginService'];
+LoginCtrl.$inject = ['$scope', '$state', 'LoginService'];
 exports['default'] = LoginCtrl;
 module.exports = exports['default'];
 
 },{}],4:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+	value: true
+});
+var fileUpload = function fileUpload(DashService) {
+	return {
+		restrict: 'E',
+		scope: {
+			type: '@'
+		},
+		templateUrl: './templates/app-core/file-upload.html'
+	};
+};
+fileUpload.$inject = ['DashService'];
+
+exports['default'] = fileUpload;
+module.exports = exports['default'];
+
+},{}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -78,7 +128,7 @@ navBar.$inject = [];
 exports['default'] = navBar;
 module.exports = exports['default'];
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 //Libraries
 'use strict';
 
@@ -90,6 +140,8 @@ var _angular2 = _interopRequireDefault(_angular);
 
 require('angular-ui-router');
 
+//CTRL
+
 var _ctrlDashCtrl = require('./ctrl/dash.ctrl');
 
 var _ctrlDashCtrl2 = _interopRequireDefault(_ctrlDashCtrl);
@@ -98,32 +150,69 @@ var _ctrlLoginCtrl = require('./ctrl/login.ctrl');
 
 var _ctrlLoginCtrl2 = _interopRequireDefault(_ctrlLoginCtrl);
 
+//Directives
+
 var _directivesNavBarDirective = require('./directives/nav-bar.directive');
 
 var _directivesNavBarDirective2 = _interopRequireDefault(_directivesNavBarDirective);
+
+var _directivesFileUploadDirective = require('./directives/file-upload.directive');
+
+var _directivesFileUploadDirective2 = _interopRequireDefault(_directivesFileUploadDirective);
+
+//Services
 
 var _servicesLoginService = require('./services/login.service');
 
 var _servicesLoginService2 = _interopRequireDefault(_servicesLoginService);
 
+var _servicesDashService = require('./services/dash.service');
+
+var _servicesDashService2 = _interopRequireDefault(_servicesDashService);
+
 var _config = require('./config');
 
 var _config2 = _interopRequireDefault(_config);
 
-_angular2['default'].module('app.core', ['ui.router']).config(_config2['default']).controller('DashCtrl', _ctrlDashCtrl2['default']).controller('LoginCtrl', _ctrlLoginCtrl2['default']).directive('navBar', _directivesNavBarDirective2['default']).service('LoginService', _servicesLoginService2['default']);
+_angular2['default'].module('app.core', ['ui.router']).config(_config2['default']).controller('DashCtrl', _ctrlDashCtrl2['default']).controller('LoginCtrl', _ctrlLoginCtrl2['default']).directive('navBar', _directivesNavBarDirective2['default']).directive('fileUpload', _directivesFileUploadDirective2['default']).service('LoginService', _servicesLoginService2['default']).service('DashService', _servicesDashService2['default']);
 
-},{"./config":1,"./ctrl/dash.ctrl":2,"./ctrl/login.ctrl":3,"./directives/nav-bar.directive":4,"./services/login.service":6,"angular":10,"angular-ui-router":8}],6:[function(require,module,exports){
+},{"./config":1,"./ctrl/dash.ctrl":2,"./ctrl/login.ctrl":3,"./directives/file-upload.directive":4,"./directives/nav-bar.directive":5,"./services/dash.service":7,"./services/login.service":8,"angular":12,"angular-ui-router":10}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var LoginService = function LoginService() {};
+var DashService = function DashService() {};
+DashService.$inject = [];
+exports["default"] = DashService;
+module.exports = exports["default"];
+
+},{}],8:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+var LoginService = function LoginService() {
+	this.login = login;
+	this.register = register;
+
+	function login(user) {
+		firebase.auth().signInWithEmailAndPassword(user.logEmail, user.logPass)["catch"](function (error) {
+			console.log(error.message);
+		});
+	}
+	function register(user) {
+		firebase.auth().createUserWithEmailAndPassword(user.regEmail, user.regPass)["catch"](function (error) {
+			console.log(error.message);
+		});
+	}
+};
 LoginService.$inject = [];
 exports["default"] = LoginService;
 module.exports = exports["default"];
 
-},{}],7:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -160,7 +249,7 @@ _firebase2['default'].initializeApp(fireConfig);
 
 _angular2['default'].module('app', ['app.core', 'ui.router', 'firebase']);
 
-},{"./app-core/index":5,"angular":10,"angular-ui-router":8,"angularfire":12,"firebase":13,"jquery":15}],8:[function(require,module,exports){
+},{"./app-core/index":6,"angular":12,"angular-ui-router":10,"angularfire":14,"firebase":15,"jquery":17}],10:[function(require,module,exports){
 /**
  * State-based routing for AngularJS
  * @version v0.3.1
@@ -4737,7 +4826,7 @@ angular.module('ui.router.state')
   .filter('isState', $IsStateFilter)
   .filter('includedByState', $IncludedByStateFilter);
 })(window, window.angular);
-},{}],9:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 /**
  * @license AngularJS v1.5.8
  * (c) 2010-2016 Google, Inc. http://angularjs.org
@@ -36506,11 +36595,11 @@ $provide.value("$locale", {
 })(window);
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],10:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":9}],11:[function(require,module,exports){
+},{"./angular":11}],13:[function(require,module,exports){
 /*!
  * AngularFire is the officially supported AngularJS binding for Firebase. Firebase
  * is a full backend so you don't need servers to build your Angular app. AngularFire
@@ -38778,7 +38867,7 @@ if ( typeof Object.getPrototypeOf !== "function" ) {
     }
 })();
 
-},{}],12:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 // Make sure dependencies are loaded on the window
 require('angular');
 require('firebase');
@@ -38789,7 +38878,7 @@ require('./dist/angularfire');
 // Export the module name from the Angular module
 module.exports = 'firebase';
 
-},{"./dist/angularfire":11,"angular":10,"firebase":13}],13:[function(require,module,exports){
+},{"./dist/angularfire":13,"angular":12,"firebase":15}],15:[function(require,module,exports){
 /**
  *  Firebase libraries for browser - npm package.
  *
@@ -38800,7 +38889,7 @@ module.exports = 'firebase';
 require('./firebase');
 module.exports = firebase;
 
-},{"./firebase":14}],14:[function(require,module,exports){
+},{"./firebase":16}],16:[function(require,module,exports){
 (function (global){
 /*! @license Firebase v3.3.1
     Build: 3.3.1-rc.3
@@ -39385,7 +39474,7 @@ ua.STATE_CHANGED="state_changed";va.RUNNING="running";va.PAUSED="paused";va.SUCC
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],15:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.2.4
  * http://jquery.com/
@@ -49201,7 +49290,7 @@ if ( !noGlobal ) {
 return jQuery;
 }));
 
-},{}]},{},[7])
+},{}]},{},[9])
 
 
 //# sourceMappingURL=main.js.map

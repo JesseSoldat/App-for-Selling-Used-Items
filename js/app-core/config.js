@@ -1,18 +1,22 @@
 let config = function($stateProvider, $urlRouterProvider){
 
 	$urlRouterProvider.otherwise('/');
-
+	
 	$stateProvider
 	//APP CORE-----------------------
 		.state('dash', {
 			url: '/',
 			controller: 'DashCtrl',
-			templateUrl: 'templates/app-core/dash.html'
+			templateUrl: 'templates/app-core/dash.html',
+		})
+		.state('editDash', {
+			url: '/editdash',
+			templateUrl: 'templates/app-core/edit-dash.html'
 		})
 		.state('login', {
 			url: '/login',
 			controller: 'LoginCtrl',
-			templateUrl: 'templates/app-core/login.html'
+			templateUrl: 'templates/app-core/login.html',
 		})
 		.state('register', {
 			url: '/register',
