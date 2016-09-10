@@ -1,8 +1,15 @@
 let DashService = function($state,$firebaseArray, $firebaseObject){
+	this.getBackground = getBackground;
 	this.fileUpload = fileUpload;
 
 	
 	let rootRef = firebase.database();
+
+	function getBackground(user){
+		let ref = rootRef.ref('jlist/users/'+user.uid+'/dashImg/url');
+		let array = $firebaseObject(ref);
+		return array;
+	}
 
 
 	function fileUpload(file, uploader, fileType){

@@ -43,11 +43,27 @@ var DashCtrl = function DashCtrl($scope, $state, $stateParams, DashService) {
 	var uid = undefined;
 	firebase.auth().onAuthStateChanged(function (user) {
 		if (user) {
-			uid = user.uid;
-			console.log(user);
+			(function () {
+				uid = user.uid;
+
+				var getBackground = DashService.getBackground(user);
+				getBackground.$loaded().then(function () {
+					if (getBackground.$value !== null) {
+
+						var url = getBackground.$value;
+						console.log(url);
+						var img = document.getElementById('dashBackground');
+						img.style.backgroundImage = 'url(' + url + ')';
+					} else {
+						var img = document.getElementById('dashBackground');
+						var url = '../img/background-wallpapers-26.jpg';
+						img.style.backgroundImage = 'url(' + url + ')';
+					}
+				}); //getBackground.$loaded
+			})();
 		} else {
-			$state.go('login');
-		}
+				$state.go('login');
+			}
 	});
 
 	$scope.changeDash = function () {
@@ -219,9 +235,16 @@ Object.defineProperty(exports, '__esModule', {
 	value: true
 });
 var DashService = function DashService($state, $firebaseArray, $firebaseObject) {
+	this.getBackground = getBackground;
 	this.fileUpload = fileUpload;
 
 	var rootRef = firebase.database();
+
+	function getBackground(user) {
+		var ref = rootRef.ref('jlist/users/' + user.uid + '/dashImg/url');
+		var array = $firebaseObject(ref);
+		return array;
+	}
 
 	function fileUpload(file, uploader, fileType) {
 		//get the user object

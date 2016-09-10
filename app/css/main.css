@@ -6409,4 +6409,10 @@ body {
   .title-area li {
     display: inline-block; }
 
+#dashBackground {
+  width: 100%;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  height: 900px; }
+
 /*# sourceMappingURL=main.css.map */

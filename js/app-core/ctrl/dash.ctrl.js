@@ -5,7 +5,21 @@ let DashCtrl = function($scope, $state, $stateParams, DashService){
 	firebase.auth().onAuthStateChanged(function(user){
 		if (user) {
 			uid = user.uid;
-			console.log(user);
+		
+			let getBackground = DashService.getBackground(user);
+			getBackground.$loaded().then(function(){
+				if(getBackground.$value !== null){
+				
+					let url = getBackground.$value;
+					console.log(url);
+					let img = document.getElementById('dashBackground');
+					img.style.backgroundImage = 'url('+url+')';
+				} else {
+					let img = document.getElementById('dashBackground');
+					let url = '../img/background-wallpapers-26.jpg';
+					img.style.backgroundImage = 'url('+url+')';
+				}
+			}) //getBackground.$loaded
 		} else {
 			$state.go('login');
 		}
