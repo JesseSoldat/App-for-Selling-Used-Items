@@ -6,6 +6,8 @@ import angularfire from 'angularfire';
 
 //import the other modules
 import './app-core/index';
+import './app-profile/index';
+
 
 var fireConfig = {
     apiKey: "AIzaSyAw5uIZdlyPYjBuYoc8zRjbiv0-lxWANys",
@@ -16,4 +18,4 @@ var fireConfig = {
   firebase.initializeApp(fireConfig);
 
   angular
-  		.module('app', ['app.core', 'ui.router', 'firebase']);
+  		.module('app', ['app.core', 'app.profile', 'ui.router', 'firebase']);

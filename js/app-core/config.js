@@ -23,6 +23,11 @@ let config = function($stateProvider, $urlRouterProvider){
 			controller: 'LoginCtrl',
 			templateUrl: 'templates/app-core/register.html'
 		})
+		.state('profile', {
+			url: '/profile',
+			controller: 'ProfileCtrl',
+			templateUrl: 'templates/app-profile/profile.html'
+		})
 
 		;
 

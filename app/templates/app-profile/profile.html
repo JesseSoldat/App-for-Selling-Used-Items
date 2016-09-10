@@ -1,0 +1,18 @@
+<div id="profilePageBackground">
+<nav-bar-profile>
+	<div class="controlsBtn" ng-show="profileControls">
+		<button class="tiny button" id="profileBtn" ng-click="editProfile()">Edit Profile</button>
+		<button class="tiny button" ng-click="logOut()">LogOut</button>
+	</div>
+</nav-bar-profile>
+<div class="profileWrapper">
+	<div>
+		<h3>Profile</h3>
+		<hr>
+		<div ng-repeat="d in data">
+			<h5>{{d.fName}}</h5>
+		</div>
+	</div>
+</div>
+
+</div>

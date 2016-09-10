@@ -6409,6 +6409,9 @@ body {
   .title-area li {
     display: inline-block; }
 
+#dashPageBackground {
+  background: #333333; }
+
 #dashBackground {
   width: 100%;
   background-size: 100%;
