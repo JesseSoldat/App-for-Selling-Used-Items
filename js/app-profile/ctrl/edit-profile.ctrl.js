@@ -1,11 +1,12 @@
 let EditProfileCtrl = function($scope, $state, ProfileService){
 	let currentUser;
 	let userObj;
-
+	
 	firebase.auth().onAuthStateChanged(function(user){
 		if(user){
 			userObj = user
 			currentUser = ProfileService.getProfile(user);
+			$scope.data = currentUser;
 		} else {
 			$state.go('login');
 		}
@@ -21,8 +22,7 @@ let EditProfileCtrl = function($scope, $state, ProfileService){
 	}
 
 	$scope.editProfile = function(user){
-		ProfileService.editProfile(user);
-		$state.go('profile');
+		ProfileService.editProfile(user, userObj);
 	}
 
 	$scope.logOut = function(){

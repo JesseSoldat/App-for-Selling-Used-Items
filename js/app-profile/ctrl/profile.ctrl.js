@@ -4,6 +4,14 @@ let ProfileCtrl = function($scope, $state, ProfileService){
 		if(user){
 			let userProfile = ProfileService.getProfile(user);
 
+			userProfile.$loaded().then(function(){
+				if(userProfile.length > 0){
+					$scope.haveBio = true;
+				} else {
+
+				}
+			})
+
 			$scope.userData = userProfile;
 
 		} else {

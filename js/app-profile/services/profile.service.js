@@ -3,7 +3,6 @@ let ProfileService = function($firebaseArray, $state){
 	this.addProfile = addProfile;
 	this.editProfile = editProfile;
 
-
 	function getProfile(user){
 		let ref = firebase.database().ref('jlist/users/'+user.uid+'/bio');
 		let array = $firebaseArray(ref);
@@ -26,8 +25,22 @@ let ProfileService = function($firebaseArray, $state){
 		});
 	}
 
-	function editProfile(user){
+	function editProfile(user, userObj){
+		
+		let ref = firebase.database().ref('jlist/users/'+userObj.uid+'/bio');
 
+		let array = $firebaseArray(ref);
+
+		array.$loaded().then(function(){
+			let item = array.$getRecord(user.$id);
+			console.log(item);
+
+			item.fName = user.fName;
+
+			array.$save(item).then(function(){
+				$state.go('profile');
+			});
+		});	
 	}
 
 };

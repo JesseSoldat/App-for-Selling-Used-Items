@@ -5,7 +5,8 @@
 		<button class="tiny button" ng-click="logOut()">LogOut</button>
 	</div>
 </nav-bar-profile>
-<div class="layoutEditProfile">
+
+<div class="layoutEditProfile" ng-show="data.length <= 0">
 	<h3>Add Profile</h3>
 	<br>
 	<form ng-submit="addProfile(user)">
@@ -14,11 +15,11 @@
 	</form>
 </div>
 
-<div class="layoutEditProfile" ng-show="userData > 0" ng-repeat="user in userData">
+<div class="layoutEditProfile" ng-show="data.length > 0" ng-repeat="d in data">
 	<h3>Edit Profile</h3>
 	<br>
-	<form ng-submit="editProfile(user)">
-		<input type="text" placeholder="First Name" ng-model="user.fName">
+	<form ng-submit="editProfile(d)">
+		<input type="text" placeholder="First Name" ng-model="d.fName">
 		<button>Submit</button>
 	</form>
 </div>

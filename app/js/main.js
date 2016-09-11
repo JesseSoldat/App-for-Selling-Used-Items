@@ -347,6 +347,7 @@ var EditProfileCtrl = function EditProfileCtrl($scope, $state, ProfileService) {
 		if (user) {
 			userObj = user;
 			currentUser = ProfileService.getProfile(user);
+			$scope.data = currentUser;
 		} else {
 			$state.go('login');
 		}
@@ -362,8 +363,7 @@ var EditProfileCtrl = function EditProfileCtrl($scope, $state, ProfileService) {
 	};
 
 	$scope.editProfile = function (user) {
-		ProfileService.editProfile(user);
-		$state.go('profile');
+		ProfileService.editProfile(user, userObj);
 	};
 
 	$scope.logOut = function () {
@@ -388,9 +388,17 @@ var ProfileCtrl = function ProfileCtrl($scope, $state, ProfileService) {
 	firebase.auth().onAuthStateChanged(function (user) {
 
 		if (user) {
-			var userProfile = ProfileService.getProfile(user);
+			(function () {
+				var userProfile = ProfileService.getProfile(user);
 
-			$scope.userData = userProfile;
+				userProfile.$loaded().then(function () {
+					if (userProfile.length > 0) {
+						$scope.haveBio = true;
+					} else {}
+				});
+
+				$scope.userData = userProfile;
+			})();
 		} else {}
 	});
 	$scope.profileControls = true;
@@ -494,7 +502,23 @@ var ProfileService = function ProfileService($firebaseArray, $state) {
 		});
 	}
 
-	function editProfile(user) {}
+	function editProfile(user, userObj) {
+
+		var ref = firebase.database().ref('jlist/users/' + userObj.uid + '/bio');
+
+		var array = $firebaseArray(ref);
+
+		array.$loaded().then(function () {
+			var item = array.$getRecord(user.$id);
+			console.log(item);
+
+			item.fName = user.fName;
+
+			array.$save(item).then(function () {
+				$state.go('profile');
+			});
+		});
+	}
 };
 ProfileService.$inject = ['$firebaseArray', '$state'];
 exports['default'] = ProfileService;
