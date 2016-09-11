@@ -28,6 +28,11 @@ let config = function($stateProvider, $urlRouterProvider){
 			controller: 'ProfileCtrl',
 			templateUrl: 'templates/app-profile/profile.html'
 		})
+		.state('editProfile', {
+			url: '/profile/edit',
+			controller: 'EditProfileCtrl',
+			templateUrl: 'templates/app-profile/edit-profile.html'
+		})
 
 		;
 

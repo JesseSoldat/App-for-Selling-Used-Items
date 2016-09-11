@@ -1,0 +1,27 @@
+<div id="profilePageBackground">
+<nav-bar-profile>
+	<div class="controlsBtn" ng-show="editProfileControls">
+		<button class="tiny button" id="editProfileBtn" ng-click="goBack('profile')">Back</button>
+		<button class="tiny button" ng-click="logOut()">LogOut</button>
+	</div>
+</nav-bar-profile>
+<div class="layoutEditProfile">
+	<h3>Add Profile</h3>
+	<br>
+	<form ng-submit="addProfile(user)">
+		<input type="text" placeholder="First Name" ng-model="user.fName">
+		<button>Submit</button>
+	</form>
+</div>
+
+<div class="layoutEditProfile" ng-show="userData > 0" ng-repeat="user in userData">
+	<h3>Edit Profile</h3>
+	<br>
+	<form ng-submit="editProfile(user)">
+		<input type="text" placeholder="First Name" ng-model="user.fName">
+		<button>Submit</button>
+	</form>
+</div>
+
+
+</div>

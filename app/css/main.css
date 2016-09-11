@@ -6418,4 +6418,9 @@ body {
   background-repeat: no-repeat;
   height: 900px; }
 
+.layoutEditProfile {
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 2%; }
+
 /*# sourceMappingURL=main.css.map */
