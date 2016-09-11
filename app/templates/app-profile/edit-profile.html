@@ -11,6 +11,12 @@
 	<br>
 	<form ng-submit="addProfile(user)">
 		<input type="text" placeholder="First Name" ng-model="user.fName">
+		<input type="text" placeholder="Last Name" ng-model="user.lName" required="">
+		<input type="text" placeholder="Address" ng-model="user.address" required="">
+		<input type="text" placeholder="City" ng-model="user.city" required="">
+		<input type="text" placeholder="State" ng-model="user.state" required="">
+		<input type="text" placeholder="Zip Code" ng-model="user.zip" required="">
+		<input type="text" placeholder="Country" ng-model="user.country" required="">
 		<button>Submit</button>
 	</form>
 </div>
@@ -20,8 +26,19 @@
 	<br>
 	<form ng-submit="editProfile(d)">
 		<input type="text" placeholder="First Name" ng-model="d.fName">
+		<input type="text" placeholder="Last Name" ng-model="d.lName">
+		<input type="text" placeholder="Address" ng-model="d.address" required="">
+		<input type="text" placeholder="City" ng-model="d.city" required="">
+		<input type="text" placeholder="State" ng-model="d.state" required="">
+		<input type="text" placeholder="Zip Code" ng-model="d.zip" required="">
+		<input type="text" placeholder="Country" ng-model="d.country" required="">
 		<button>Submit</button>
 	</form>
+</div>
+
+<div>
+	<h3>Upload an Avatar</h3>
+	<photo-avatar type="avatar"></photo-avatar>
 </div>
 
 

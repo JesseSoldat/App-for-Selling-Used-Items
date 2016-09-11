@@ -6,6 +6,7 @@ import EditProfileCtrl from './ctrl/edit-profile.ctrl';
 
 //Directive 
 import navBarProfile from './directives/nav-bar-profile.directive';
+import photoAvatar from './directives/photo-avatar.directive';
 //Services
 import ProfileService from './services/profile.service';
 
@@ -15,6 +16,7 @@ angular
 	.controller('EditProfileCtrl', EditProfileCtrl)
 
 	.directive('navBarProfile', navBarProfile)
+	.directive('photoAvatar', photoAvatar)
 
 	.service('ProfileService', ProfileService)
 

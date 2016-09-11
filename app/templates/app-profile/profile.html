@@ -6,15 +6,21 @@
 	</div>
 </nav-bar-profile>
 <div class="profileWrapper">
-	<div>
+	<div class="left profileInfo">
 		<h3>Profile</h3>
 		<hr>
 		<div ng-repeat="d in userData">
-			<h5>{{d.fName}}</h5>
-			<h5>{{d.email}}</h5>
-			<h5>{{d.id}}</h5>
-
+			<h5>{{d.fName}} {{d.LName}}</h5>
+			<h5>{{d.address}}</h5>
+			<h5>{{d.city}}</h5>
+			<h5>{{d.state}}</h5>
+			<h5>{{d.zip}}</h5>
+			<h5>{{d.country}}</h5>
 		</div>
+	</div>
+
+	<div class="right">
+		<img src="{{avatar}}">
 	</div>
 </div>
 

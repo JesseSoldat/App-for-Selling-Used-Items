@@ -14,6 +14,12 @@ let ProfileCtrl = function($scope, $state, ProfileService){
 
 			$scope.userData = userProfile;
 
+			let avatarData = ProfileService.getAvatar(user);
+
+			avatarData.$loaded().then(function(){
+				$scope.avatar = avatarData[0].$value;
+			})
+
 		} else {
 
 		}
