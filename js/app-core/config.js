@@ -33,6 +33,16 @@ let config = function($stateProvider, $urlRouterProvider){
 			controller: 'EditProfileCtrl',
 			templateUrl: 'templates/app-profile/edit-profile.html'
 		})
+		.state('photos', {
+			url: '/photos',
+			controller: 'PhotosCtrl',
+			templateUrl: 'templates/app-profile/photos.html'
+		})
+		.state('photo', {
+			url: '/photo',
+			controller: 'PhotoCtrl',
+			templateUrl: 'templates/app-profile/photo.html'
+		})
 
 		;
 

@@ -4,6 +4,7 @@ let ProfileService = function($firebaseArray, $firebaseObject, $state){
 	this.editProfile = editProfile;
 	this.fileUpload = fileUpload;
 	this.getAvatar = getAvatar;
+	this.getPhotos = getPhotos;
 
 	function getProfile(user){
 		let ref = firebase.database().ref('jlist/users/'+user.uid+'/bio');
@@ -90,6 +91,45 @@ let ProfileService = function($firebaseArray, $firebaseObject, $state){
 				}); //getDownloadUrl
 			}); //uploadTask.on
 		}//if 
+		if(type === 'photos'){
+			//add a DATABASE RECORD
+			let ref = firebase.database().ref('jlist/users/'+user.uid+'/photos');
+			let array = $firebaseArray(ref);
+			array.$add({
+				name: fileName
+			}).then(function(ref){
+				let refId = ref.key;
+				let index = array.$indexFor(refId);
+			});
+
+			let id;
+			let metadata;
+			array.$loaded().then(function(){
+				let length = array.length;
+				let current = length -1; //0-5
+				id = array.$keyAt(current);
+
+				let metadata = {
+					customMetadata: {
+						'id': id
+					}
+				};//metadata
+				let imgRef = storageRef.child('jlist/'+user.uid+'/photos/'+fileName);
+				let uploadTask = imgRef.put(file, metadata);
+
+				uploadTask.on('state_changed', function progress(snapshot){
+					let percent = (snapshot.bytesTransferred / snapshot.totalBytes)*100;
+
+					uploader.value = percent;
+				}, function error(err){
+
+				}, function complete(){
+					$state.go('photo')
+				}); //uploadTask
+
+			});//array.$loaded
+
+		}//if
 		else {
 			return
 		}
@@ -97,6 +137,13 @@ let ProfileService = function($firebaseArray, $firebaseObject, $state){
 
 	function getAvatar(user){
 		let ref = firebase.database().ref('jlist/users/'+user.uid+'/avatar');
+		let array = $firebaseArray(ref);
+		return array;
+	}
+
+	function getPhotos(){
+		let user = firebase.auth().currentUser;
+		let ref = firebase.database().ref('jlist/users/'+user.uid+'/photos');
 		let array = $firebaseArray(ref);
 		return array;
 	}
