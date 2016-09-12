@@ -16,6 +16,7 @@ var config = function config($stateProvider, $urlRouterProvider) {
 		templateUrl: 'templates/app-core/dash.html'
 	}).state('editDash', {
 		url: '/editdash',
+		controller: 'DashCtrl',
 		templateUrl: 'templates/app-core/edit-dash.html'
 	}).state('login', {
 		url: '/login',
@@ -40,7 +41,8 @@ var config = function config($stateProvider, $urlRouterProvider) {
 	}).state('photo', {
 		url: '/photo',
 		controller: 'PhotoCtrl',
-		templateUrl: 'templates/app-profile/photo.html'
+		templateUrl: 'templates/app-profile/photo.html',
+		params: { myParam: null }
 	});
 };
 config.$inject = ['$stateProvider', '$urlRouterProvider'];
@@ -67,7 +69,7 @@ var DashCtrl = function DashCtrl($scope, $state, $stateParams, DashService) {
 					if (getBackground.$value !== null) {
 
 						var url = getBackground.$value;
-						console.log(url);
+
 						var img = document.getElementById('dashBackground');
 						img.style.backgroundImage = 'url(' + url + ')';
 					} else {
@@ -84,6 +86,10 @@ var DashCtrl = function DashCtrl($scope, $state, $stateParams, DashService) {
 
 	$scope.changeDash = function () {
 		$state.go('editDash');
+	};
+
+	$scope.goBack = function (state) {
+		$state.go(state);
 	};
 	$scope.logOut = function () {
 		firebase.auth().signOut().then(function () {
@@ -390,10 +396,69 @@ module.exports = exports['default'];
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
-  value: true
+	value: true
 });
-var PhotoCtrl = function PhotoCtrl($scope, $state, $stateParams, ProfileService) {};
-PhotoCtrl.$inject = ['$scope', '$state', '$stateParams', 'ProfileService'];
+var PhotoCtrl = function PhotoCtrl($scope, $state, $stateParams, $firebaseObject, ProfileService) {
+	var userObj = undefined;
+
+	var storage = firebase.storage();
+
+	firebase.auth().onAuthStateChanged(function (user) {
+
+		if (user) {
+			if ($stateParams.myParam === null) {
+				$state.go('photos');
+			}
+
+			userObj = user;
+
+			var photoUrl = $stateParams.myParam.url;
+
+			$scope.url = photoUrl;
+		} else {
+			$state.go('login');
+		}
+	}); //firebase.auth()
+
+	$scope.goBack = function (state) {
+		$state.go(state);
+	};
+
+	$scope.deletePhoto = function (url) {
+
+		var photoUrl = storage.refFromURL(url);
+
+		photoUrl.getMetadata().then(function (metadata) {
+
+			var metaId = metadata.customMetadata.id;
+
+			console.log(metaId);
+			console.log(metadata);
+
+			var ref = firebase.database().ref('jlist/users/' + userObj.uid + '/photos/' + metaId);
+			var obj = $firebaseObject(ref);
+
+			obj.$remove().then(function (ref) {
+
+				photoUrl['delete']().then(function () {
+
+					$state.go('photos');
+				})['catch'](function (err) {}); //photoUrl.delete
+			}, function (err) {
+				console.log(err);
+			}); //obj.$remove
+		}); //customMeta.getMetadata
+	};
+
+	$scope.logOut = function () {
+		firebase.auth().signOut().then(function () {
+			$state.go('login');
+		}, function (error) {
+			console.log(error);
+		});
+	};
+};
+PhotoCtrl.$inject = ['$scope', '$state', '$stateParams', '$firebaseObject', 'ProfileService'];
 exports['default'] = PhotoCtrl;
 module.exports = exports['default'];
 
@@ -416,7 +481,6 @@ var PhotosCtrl = function PhotosCtrl($scope, ProfileService, $state) {
 				var urlArray = [];
 
 				photos.$loaded().then(function () {
-					console.log(photos);
 
 					for (var i = 0; i < photos.length; i++) {
 						fileArray.push(photos[i].name);
@@ -433,13 +497,29 @@ var PhotosCtrl = function PhotosCtrl($scope, ProfileService, $state) {
 									$scope.url = urlArray;
 								});
 							}); //storageRef
-						} //for
-						console.log(urlArray);
-					}
-				});
+						} //for	
+					} //buildUrlArray
+				}); //photos.$loaded
 			})();
-		}
-	});
+		} //if
+		else {
+				$state.go('login');
+			}
+	}); //firebase.auth()
+
+	$scope.singlePhoto = function (url) {
+		$state.go('photo', {
+			myParam: { url: url }
+		});
+	};
+
+	$scope.logOut = function () {
+		firebase.auth().signOut().then(function () {
+			$state.go('login');
+		}, function (error) {
+			console.log(error);
+		});
+	};
 };
 PhotosCtrl.$inject = ['$scope', 'ProfileService', '$state'];
 exports['default'] = PhotosCtrl;

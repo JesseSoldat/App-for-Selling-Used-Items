@@ -45,10 +45,49 @@ body {
 	height: 900px;
 	
 }
+//Profile-----------------------------------
+.profileWrapper {
+	width: 80%;
+	margin: 0 auto;
+	margin-top: 1%;
+
+	.profileInfo {
+		width: 40%;
+		h5 {
+			line-spacing: 1.5em;
+		}
+	}
+	.profileImg {
+		width: 40%;
+		margin-top: 2%;
+	}
+}
 
 //Edit PROFILE--------------------------------------
 .layoutEditProfile {
 	width: 80%;
 	margin: 0 auto;
 	margin-top: 2%;
+}
+
+
+//Photos------------------------------------
+.layoutUploader {
+
+}
+
+.layoutPhotos {
+	display: inline-block;
+	width: 30%;
+	margin: 1% 1.5%;
+
+
+}
+//Photo----------------------------------------
+.layoutPhoto {
+	
+	img {
+		margin: 0 auto;
+		display: block;
+	}
 }

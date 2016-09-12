@@ -11,7 +11,7 @@ let DashCtrl = function($scope, $state, $stateParams, DashService){
 				if(getBackground.$value !== null){
 				
 					let url = getBackground.$value;
-					console.log(url);
+			
 					let img = document.getElementById('dashBackground');
 					img.style.backgroundImage = 'url('+url+')';
 				} else {
@@ -27,6 +27,10 @@ let DashCtrl = function($scope, $state, $stateParams, DashService){
 
 	$scope.changeDash = function(){
 		$state.go('editDash');
+	}
+
+	$scope.goBack = function(state){
+		$state.go(state);
 	}
 	$scope.logOut = function(){
 		firebase.auth().signOut().then(function(){

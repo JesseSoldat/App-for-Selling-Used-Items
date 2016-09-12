@@ -1,8 +1,10 @@
-<nav-bar-profile></nav-bar-profile>
-<div>
+<nav-bar-profile>
+	<button class="tiny button" ng-click="logOut()">Log Out</button>
+</nav-bar-profile>
+<div class="layoutUploader">
 	<h3>Upload your Photos</h3>
 	<photo-avatar type="photo"></photo-avatar>
 </div>
-<div ng-repeat="u in url">
-	<img ng-src="{{u}}">
+<div class="layoutPhotos" ng-repeat="u in url">
+	<img ng-src="{{u}}" ng-click="singlePhoto(u);">
 </div>

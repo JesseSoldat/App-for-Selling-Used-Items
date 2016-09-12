@@ -11,6 +11,7 @@ let config = function($stateProvider, $urlRouterProvider){
 		})
 		.state('editDash', {
 			url: '/editdash',
+			controller: 'DashCtrl',
 			templateUrl: 'templates/app-core/edit-dash.html'
 		})
 		.state('login', {
@@ -41,7 +42,8 @@ let config = function($stateProvider, $urlRouterProvider){
 		.state('photo', {
 			url: '/photo',
 			controller: 'PhotoCtrl',
-			templateUrl: 'templates/app-profile/photo.html'
+			templateUrl: 'templates/app-profile/photo.html',
+			params: {myParam: null}
 		})
 
 		;

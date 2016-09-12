@@ -6418,9 +6418,30 @@ body {
   background-repeat: no-repeat;
   height: 900px; }
 
+.profileWrapper {
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 1%; }
+  .profileWrapper .profileInfo {
+    width: 40%; }
+    .profileWrapper .profileInfo h5 {
+      line-spacing: 1.5em; }
+  .profileWrapper .profileImg {
+    width: 40%;
+    margin-top: 2%; }
+
 .layoutEditProfile {
   width: 80%;
   margin: 0 auto;
   margin-top: 2%; }
+
+.layoutPhotos {
+  display: inline-block;
+  width: 30%;
+  margin: 1% 1.5%; }
+
+.layoutPhoto img {
+  margin: 0 auto;
+  display: block; }
 
 /*# sourceMappingURL=main.css.map */

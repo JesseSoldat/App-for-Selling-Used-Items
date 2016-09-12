@@ -10,7 +10,7 @@ let PhotosCtrl = function($scope, ProfileService, $state){
 			let urlArray = [];
 
 			photos.$loaded().then(function(){
-				console.log(photos);
+			
 
 				for(let i = 0; i < photos.length; i++){
 					fileArray.push(photos[i].name);
@@ -29,18 +29,28 @@ let PhotosCtrl = function($scope, ProfileService, $state){
 							})
 
 						}); //storageRef
-					}//for
-					console.log(urlArray);
-					
-					
-				}
-
-
-			})
-
-
+					}//for	
+				} //buildUrlArray
+			})//photos.$loaded
+		}//if
+		else {
+			$state.go('login');
 		}
-	})
+	}); //firebase.auth()
+
+	$scope.singlePhoto = function(url){
+		$state.go('photo', {
+			myParam: {url: url}
+		});
+	}
+	
+	$scope.logOut = function(){
+		firebase.auth().signOut().then(function(){
+			$state.go('login');
+		}, function(error){
+			console.log(error);
+		});
+	}
 
 };
 PhotosCtrl.$inject = ['$scope', 'ProfileService', '$state'];

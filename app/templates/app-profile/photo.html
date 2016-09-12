@@ -1,1 +1,9 @@
-<nav-bar-profile></nav-bar-profile>
+<nav-bar-profile>
+	<button class="button alert" ng-click="deletePhoto(url)">Delete</button>
+	<button ng-click="goBack('photos')">Back</button>
+	<button class="tiny button" ng-click="logOut()">Log Out</button>
+</nav-bar-profile>
+
+<div class="layoutPhoto">
+	<img ng-src="{{url}}">
+</div>
