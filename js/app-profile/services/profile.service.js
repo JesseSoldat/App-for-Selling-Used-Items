@@ -91,7 +91,7 @@ let ProfileService = function($firebaseArray, $firebaseObject, $state){
 				}); //getDownloadUrl
 			}); //uploadTask.on
 		}//if 
-		if(type === 'photos'){
+		if(type === 'photo'){
 			//add a DATABASE RECORD
 			let ref = firebase.database().ref('jlist/users/'+user.uid+'/photos');
 			let array = $firebaseArray(ref);

@@ -407,7 +407,37 @@ var PhotosCtrl = function PhotosCtrl($scope, ProfileService, $state) {
 
 	firebase.auth().onAuthStateChanged(function (user) {
 		if (user) {
-			var storageRef = firebase.storage().ref();
+			(function () {
+				var storageRef = firebase.storage().ref();
+
+				var photos = ProfileService.getPhotos();
+
+				var fileArray = [];
+				var urlArray = [];
+
+				photos.$loaded().then(function () {
+					console.log(photos);
+
+					for (var i = 0; i < photos.length; i++) {
+						fileArray.push(photos[i].name);
+					}
+					buildUrlArray();
+
+					function buildUrlArray() {
+						for (var i = 0; i < fileArray.length; i++) {
+							storageRef.child('jlist/' + user.uid + '/photos/' + fileArray[i]).getDownloadURL().then(function (url) {
+
+								urlArray.push(url);
+
+								$scope.$apply(function () {
+									$scope.url = urlArray;
+								});
+							}); //storageRef
+						} //for
+						console.log(urlArray);
+					}
+				});
+			})();
 		}
 	});
 };
@@ -658,7 +688,7 @@ var ProfileService = function ProfileService($firebaseArray, $firebaseObject, $s
 				}); //uploadTask.on
 			})();
 		} //if
-		if (type === 'photos') {
+		if (type === 'photo') {
 			(function () {
 				//add a DATABASE RECORD
 				var ref = firebase.database().ref('jlist/users/' + user.uid + '/photos');
